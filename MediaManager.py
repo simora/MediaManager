@@ -1,7 +1,9 @@
 import sys
+import time
+import os
 
 import mediamanager
-from mediamanager import cli
+from mediamanager import ui
 
 if sys.version_info < (2,5):
   sys.exit("Sorry, requires Python 2.5, 2.6 or 2.7.")
@@ -21,9 +23,20 @@ except:
   sys.exit("The Python module PyAV is required")
 
 def main():
-  cli.main()
 
-  return
+  mediamanager.initialize()
+  mediamanager.start()
+
+  cli = ui.CLI()
+
+  while cli.thread.isAlive():
+    time.sleep(10)
+
+  cli.finish()
+  cli = None
+  mediamanager.shutdown()
+
+  os.exit(0)
 
 
 if __name__ == "__main__":

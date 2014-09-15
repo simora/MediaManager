@@ -44,99 +44,8 @@ def main():
       curses.endwin()
       os.system('clear')
       break
-    else:
-      if not menuMain():
-        break
 
   mediamanager.shutdown()
-
-def menuMain():
-
-  retval = False
-
-  while True:
-    print('%s=============================================================%s' % (colors.HEADER, colors.ENDC))
-    print('%s%-4s%-56s%s' % (colors.ENDC, '', 'Main Menu', colors.ENDC))
-    print('%s=============================================================%s' % (colors.HEADER, colors.ENDC))
-    print('[1]  Status')
-    print('[2]  Exit')
-    print
-    selection = _promptSelection(2)
-    if selection is not None:
-      if selection == 1:
-        retval = True
-        menuStatus()
-      elif selection == 2:
-        retval = False
-        break
-
-  return retval
-
-def menuStatus():
-
-  retval = False
-
-  while True:
-    print('%s=============================================================%s' % (colors.HEADER, colors.ENDC))
-    print('%s%-4s%-56s%s' % (colors.ENDC, '', 'Status Menu', colors.ENDC))
-    print('%s=============================================================%s' % (colors.HEADER, colors.ENDC))
-    print('[1]  Print Media Status')
-    print('[2]  Thread Status')
-    print('[3]  Exit')
-    print
-    selection = _promptSelection(3)
-    if selection is not None:
-      if selection == 1:
-        printMediaStatus()
-      elif selection == 2:
-        printThreadStatus()
-      elif selection == 3:
-        break
-
-  return retval
-
-def printMediaStatus():
-  if Media.MEDIA is not None:
-    valMediaCount = len(Media.MEDIA)
-  else:
-    valMediaCount = 'Unavailable'
-  if Media.PENDING is not None:
-    valPendingCount = Media.PENDING
-  else:
-    valPendingCount = 'Unavailable'
-
-  print('Media Count: %s' % valMediaCount)
-  print('Pending Verification: %s' % valPendingCount)
-  print
-
-  _promptSelection(0)
-
-def printThreadStatus():
-  if mediamanager.schedulerScanner.action.amActive:
-    valScannerStatus = 'Running'
-  else:
-    valScannerStatus = 'Idle'
-
-  print('Scanner: %s' % valScannerStatus)
-  print
-
-  _promptSelection(0)
-
-def _promptSelection(upper=1):
-  try:
-    if upper == 0:
-      raw_input('Press any key to continue')
-      return None
-    else:
-      choice = int(raw_input('Enter your choice [1-%d] : ' % upper))
-      if choice <= upper and choice >= 1:
-        return choice
-      else:
-        print("'%d' is not a valid selection" % choice)
-        return None
-  except ValueError, e:
-    print("'%s' is not a valid integer'" % e.args[0].split(": ")[1])
-    return None
 
 def runmenu(menu, parent):
 
@@ -255,11 +164,9 @@ class _printMediaInfo():
 
   def run(self):
     menu = []
-    if Media.MEDIA is not None:
-      menu.append('Media Count : %s' % len(Media.MEDIA))
-    else:
-      menu.append('Media Count : Unavailable')
-    menu.append('Pending Count : %s' % len(Media.PENDING.keys()))
+    menu.append('Media Count : %s' % len(Media.MEDIA))
+    menu.append('Pending Count : %s' % len(Media.PENDING))
+    menu.append('Non-Compliant Count : %s' % len(Media.NONCOMPLIANT))
 
     return _formatMenuPrint(menu)
 

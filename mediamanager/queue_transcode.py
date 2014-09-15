@@ -45,7 +45,10 @@ class QueueItemTranscode(queue_generic.QueueItem):
   def execute(self):
     self.amActive = True
 
-    self.job.run()
+    try:
+      self.job.run()
+    except Exception, e:
+      logger.log(u"QueueTranscode :: Exception caught running job; %s" % e, logger.DEBUG)
 
     self.finish()
 

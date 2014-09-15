@@ -15,6 +15,7 @@ LOG_HANDLER = None
 LOG_FILE = 'mediamanager.log'
 LOG_PATH = None
 LOG_LEVEL = logging.DEBUG
+LOG_EXTRA_DEBUG = False
 
 reverseNames = {u'ERROR': ERROR,
                 u'WARNING': WARNING,

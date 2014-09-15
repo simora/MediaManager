@@ -17,14 +17,14 @@ class SchedulerTranscode(scheduler.Scheduler):
       self.action.sort_queue()
 
       # check if interval has passed
-      if len(media.PENDING.keys()) <= mediamanager.SCHEDULER_TRANSCODE_LIMIT or self.action.queue[0].priority == queue_generic.QueuePriorities.HIGH:
+      if (len(self.action.queue) > 0 and len(media.PENDING.keys()) <= mediamanager.TRANSCODER_PENDING_LIMIT) or (len(self.action.queue) > 0 and self.action.queue[0].priority == queue_generic.QueuePriorities.HIGH):
         should_run = True
       if should_run:
         self.lastRun = current_time
         try:
-          if not self.silent:
+          if logger.LOG_EXTRA_DEBUG:
             logger.log(u"Starting new thread: " + self.threadName, logger.DEBUG)
-            self.action.run()
+          self.action.run()
         except Exception, e:
           logger.log(u"Exception generated in thread " + self.threadName, logger.ERROR)
           logger.log(repr(traceback.format_exc()), logger.DEBUG)

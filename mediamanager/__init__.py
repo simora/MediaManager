@@ -14,12 +14,16 @@ COMPLIANCE = None
 VERBOSE = False
 
 SCANNER_FREQUENCY = 5
-SCHEDULER_TRANSCODE_LIMIT = 20
+
 
 MEDIA_PENDING_CYCLETIME = 10
 
 schedulerScanner = None
 schedulerTranscode = None
+
+TRANSCODER_TEMPDIR = '~/temp_conversion'
+TRANSCODER_PENDING_EXTENSION = 'mmtemp' # Extension with no leading period
+TRANSCODER_PENDING_LIMIT = 20
 
 def initialize():
 
@@ -32,18 +36,19 @@ def initialize():
 
     logger.initialize()
 
-    SOURCES = ["/home/likewise-open/MARKLEHAUS/simora/SampleData/Films", "/home/likewise-open/MARKLEHAUS/simora/SampleData/Series"]
+    SOURCES = ["~/SampleData/Films", "~/SampleData/Series"]
 
     COMPLIANCE = {}
     COMPLIANCE['Media'] = {}
     COMPLIANCE['Media']['Container'] = {}
-    COMPLIANCE['Media']['Container']['Codec'] = ['Matroska']
+    COMPLIANCE['Media']['Container']['Codec'] = 'Matroska'
     COMPLIANCE['Media']['Video'] = {}
-    COMPLIANCE['Media']['Video']['Codec'] = ['AVC']
+    COMPLIANCE['Media']['Video']['Codec'] = 'AVC'
     COMPLIANCE['Media']['Audio'] = {}
-    COMPLIANCE['Media']['Audio']['Codec'] = ['AC3']
+    COMPLIANCE['Media']['Audio']['Codec'] = 'AC3'
+    COMPLIANCE['Media']['Audio']['Rate'] = 48000
     COMPLIANCE['Media']['Subtitles'] = {}
-    COMPLIANCE['Media']['Subtitles']['Codec'] = ['SSA']
+    COMPLIANCE['Media']['Subtitles']['Codec'] = 'SSA'
     COMPLIANCE['Media']['Subtitles']['BurnIn'] = False
 
     schedulerScanner = scheduler.Scheduler(media.Scanner(),
