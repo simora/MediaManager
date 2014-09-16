@@ -1,5 +1,6 @@
 import datetime
 import time
+import traceback
 
 import mediamanager
 from mediamanager import logger
@@ -14,10 +15,12 @@ class SchedulerTranscode(scheduler.Scheduler):
       current_time = datetime.datetime.now()
       should_run = False
 
-      self.action.sort_queue()
-
       # check if interval has passed
-      if (len(self.action.queue) > 0 and len(media.PENDING.keys()) <= mediamanager.TRANSCODER_PENDING_LIMIT) or (len(self.action.queue) > 0 and self.action.queue[0].priority == queue_generic.QueuePriorities.HIGH):
+      if (len(self.action.queues[queue_generic.QueuePriorities.HIGH])) > 0:
+        should_run = True
+      elif (len(self.action.queues[queue_generic.QueuePriorities.NORMAL]) > 0 and len(media.PENDING.keys()) <= mediamanager.TRANSCODER_PENDING_LIMIT):
+        should_run = True
+      elif (len(self.action.queues[queue_generic.QueuePriorities.LOW]) > 0 and len(media.PENDING.keys()) <= mediamanager.TRANSCODER_PENDING_LIMIT):
         should_run = True
       if should_run:
         self.lastRun = current_time

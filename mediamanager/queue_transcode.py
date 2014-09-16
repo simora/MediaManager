@@ -13,17 +13,19 @@ class QueuePriorities:
 class QueueTranscode(queue_generic.GenericQueue):
   def add_item(self, item):
     if not self.is_in_queue(item):
-      item.added = datetime.datetime.now()
-      self.queue.append(item)
+      with self.queue_lock:
+        item.added = datetime.datetime.now()
+        self.queues[item.priority].append(item)
       return True
     else:
       logger.log(u"Not adding item, it's already in the queue", logger.DEBUG)
       return False
 
   def is_in_queue(self, item):
-    for x in self.queue:
-      if item.name == x.name:
-        return True
+    with self.queue_lock:
+      for x in self.queues[item.priority]:
+        if item.name == x.name:
+          return True
     return False
 
 class QueueItemTranscode(queue_generic.QueueItem):
