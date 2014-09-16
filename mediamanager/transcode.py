@@ -70,7 +70,11 @@ class TranscodeJob():
         in_packet.stream = av_output_file_streams[in_packet.stream]
         if logger.LOG_EXTRA_DEBUG:
           logger.log(u"TranscodeJob :: \tout: %s" % in_packet.stream, logger.DEBUG)
-        av_output_file.mux(in_packet)
+        try:
+          av_output_file.mux(in_packet)
+        except Exception, e:
+          logger.log(u"TranscodeJob :: av_output_file.mux() threw exception; %s" % e, logger.DEBUG)
+          logger.log(u"TranscodeJob :: i = %s, in_packet = %s" % (i, in_packet), logger.DEBUG)
 
     #for stream in av_output_file_streams.values():
     #  if stream.type == b'audio':
@@ -86,6 +90,7 @@ class TranscodeJob():
     #        logger.log(u"TranscodeJob :: Done flushing encoder for stream %s" % stream, logger.DEBUG)
     #        break
 
+    logger.log(u"TranscodeJob :: Closing file", logger.DEBUG)
     av_output_file.close()
 
     logger.log(u'TranscodeJob :: Job run for file %s' % self.name, logger.DEBUG)

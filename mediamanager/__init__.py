@@ -91,6 +91,12 @@ def halt():
         schedulerScanner.thread.join(10)
       except:
         pass
+      schedulerTranscode.abort = True
+      logger.log(u'Waiting for the TRANSCODER thread to exit')
+      try:
+        schedulerTranscode.thread.join(10)
+      except:
+        pass
 
       __INITIALIZED__ = False
 
