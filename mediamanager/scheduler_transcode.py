@@ -31,10 +31,16 @@ class SchedulerTranscode(scheduler.Scheduler):
         except Exception, e:
           logger.log(u"Exception generated in thread " + self.threadName, logger.ERROR)
           logger.log(repr(traceback.format_exc()), logger.DEBUG)
+          self.abort = True
 
       if self.abort:
         self.abort = False
-        self.thread = None
+        try:
+          self.action.stop()
+        except:
+          pass
+        finally:
+          self.thread = None
         return
 
       time.sleep(1)

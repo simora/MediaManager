@@ -5,9 +5,6 @@ A Python application for rendering video files complaint against user specified 
 
 The following dependencies need to be resolved:
 
-PyAV
-Install with pip install av
-
 BeautifulSoup4
 Install with pip install bs4
 
@@ -17,11 +14,10 @@ Install according to distribution mediainfo such as "sudo apt-get install mediai
 FFMPEG
 Install according to distribution the following:
 ffmpeg
-libavdevice-dev
-libavresample-dev
-libavformat-dev
-libavcodec-dev
-libavutil-dev
-libswscale-dev
-libswresample-dev
+
+Changelog
+=========
+
+v0.1
+-Initial offering provides ability to scan specified SOURCES for media files and stream copies video, converts audio where not ac3 and muxes to mkv container. If files comply with that criteria then they are ignored.
 

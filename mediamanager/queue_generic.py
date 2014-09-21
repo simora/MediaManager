@@ -83,6 +83,19 @@ class GenericQueue(object):
 
         self.currentItem = queueItem
 
+  def stop(self):
+    logger.log("%s :: Stop has been called" % self.queue_name, logger.DEBUG)
+    try:
+      if self.thread.isAlive():
+        self.currentItem.finish()
+        logger.log("%s :: Waiting for queue thread to stop" % self.queue_name, logger.DEBUG)
+        self.thread.join(10)
+        self.thread = None
+      else:
+        logger.log("%s :: Thread is not running" % self.queue_name, logger.DEBUG)
+    except Exception, e:
+      logger.log("%s :: Exception was caught; %s" % (self.queue_name, e), logger.DEBUG)
+
 class QueueItem:
     def __init__(self, name, action_id = 0):
         self.name = name

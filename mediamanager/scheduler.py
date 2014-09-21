@@ -59,7 +59,7 @@ class Scheduler:
             if should_run:
                 self.lastRun = current_time
                 try:
-                    if not self.silent:
+                    if logger.LOG_EXTRA_DEBUG:
                         logger.log(u"Starting new thread: " + self.threadName, logger.DEBUG)
                     self.action.run()
                 except Exception, e:
